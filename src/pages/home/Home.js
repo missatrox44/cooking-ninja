@@ -14,10 +14,9 @@ export default function Home() {
   useEffect(() => {
     setIsPending(true);
     //callback function takes snapshot of collection when get data
-    projectFirestore
-      .collection("recipes")
-      .get()
-      .then((snapshot) => {
+    //add listener to check for any changes, need to unsubscribe
+    const unsub = projectFirestore.collection("recipes").onSnapshot(
+      (snapshot) => {
         // console.log(snapshot)
         if (snapshot.empty) {
           setError("No recipes to load");
@@ -31,10 +30,16 @@ export default function Home() {
           setData(results);
           setIsPending(false);
         }
-      }).catch(err => {
-        setError(err.message)
-        setIsPending(false)
-      })
+        //dont use catch block for error, instead pass in as second argument
+      },
+      (err) => {
+        setError(err.message);
+        setIsPending(false);
+      }
+    );
+
+    //cleanup function when component unmounts - call unsubscribe function
+    return () => unsub();
   }, []);
 
   return (

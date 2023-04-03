@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react"
 
-//accept url into the hook which we want to fetch data from
-export const useFetch = (url) => {
-  //set up state for the data, isPending and error
+export const useFetch = (url, method = "GET") => {
   const [data, setData] = useState(null)
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState(null)
+  const [options, setOptions] = useState(null)
+
+  const postData = (postData) => {
+    setOptions({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(postData)
+    })
+  }
 
   useEffect(() => {
     const controller = new AbortController()
 
-    //perform fetch inside useEffect hook whenever the url changes and once initially
-    const fetchData = async () => {
+    const fetchData = async (fetchOptions) => {
       setIsPending(true)
-
+      
       try {
-        const res = await fetch(url, { signal: controller.signal })
-        if (!res.ok) {
+        const res = await fetch(url, { ...fetchOptions, signal: controller.signal })
+        if(!res.ok) {
           throw new Error(res.statusText)
         }
         const data = await res.json()
@@ -34,14 +42,19 @@ export const useFetch = (url) => {
       }
     }
 
-    fetchData()
+    // invoke the function
+    if (method === "GET") {
+      fetchData()
+    }
+    if (method === "POST" && options) {
+      fetchData(options)
+    }
 
     return () => {
       controller.abort()
     }
 
-  }, [url])
+  }, [url, method, options])
 
-  //return states
-  return { data, isPending, error }
+  return { data, isPending, error, postData }
 }

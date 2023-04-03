@@ -1,20 +1,19 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDCeOytuIxNGchrGq4CrZq4cpohiIX9uYg",
-  authDomain: "testing-123-c16fc.firebaseapp.com",
-  projectId: "testing-123-c16fc",
-  storageBucket: "testing-123-c16fc.appspot.com",
-  messagingSenderId: "934001709223",
-  appId: "1:934001709223:web:e36d27896426d6ebb30b82",
-  measurementId: "G-5TQT44T2V9"
-}
+  apiKey: "AIzaSyBbR-ycLuXU-6MBZW0gE68gdgPHdYTuQ2M",
+  authDomain: "cooking-ninja-site-4c73d.firebaseapp.com",
+  projectId: "cooking-ninja-site-4c73d",
+  storageBucket: "cooking-ninja-site-4c73d.appspot.com",
+  messagingSenderId: "275535176458",
+  appId: "1:275535176458:web:efc057118d8b33b4d990f3",
+};
 
 // init firebase
-firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig);
 
 // init services
-const projectFirestore = firebase.firestore()
+const projectFirestore = firebase.firestore();
 
-export { projectFirestore }
+export { projectFirestore };

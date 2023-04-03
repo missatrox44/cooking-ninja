@@ -16,12 +16,11 @@ export default function Recipe() {
 
   useEffect(() => {
     setIsPending(true);
-
-    projectFirestore
+    //add listener and unsubscribe to listener in cleanup function
+    const unsub = projectFirestore
       .collection("recipes")
       .doc(id)
-      .get()
-      .then((doc) => {
+      .onSnapshot((doc) => {
         // console.log(doc)
         if (doc.exists) {
           setIsPending(false);
@@ -31,15 +30,17 @@ export default function Recipe() {
           setError("Could not find that recipe");
         }
       });
+    //cleanup function
+    return () => unsub();
   }, [id]);
 
   //dont have to update ALL properties
   const handleClick = () => {
-    projectFirestore.collection('recipes').doc(id).update({
-      title: 'Something completely different'
-    })
-  }
- 
+    projectFirestore.collection("recipes").doc(id).update({
+      title: "Something completely different",
+    });
+  };
+
   return (
     <div className={`recipe ${mode}`}>
       {error && <p className="error">{error}</p>}
